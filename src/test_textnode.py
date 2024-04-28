@@ -1,8 +1,7 @@
 import unittest
 
-from textnode import TextNode
+from textnode import TextNode, text_node_to_html_node
 from htmlnode import LeafNode
-from helpers import text_node_to_html_node
 
 class TestTextNode(unittest.TestCase):
     def test_eq(self):

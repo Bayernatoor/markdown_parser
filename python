@@ -1,0 +1,1 @@
+main.sh -m unittest discover -s src

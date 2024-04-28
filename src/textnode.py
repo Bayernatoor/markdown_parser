@@ -42,27 +42,3 @@ def text_node_to_html_node(text_node):
         return LeafNode("a", text_node.text, {"href": text_node.url})
     elif text_node.text_type == "image":
         return LeafNode("img", "",  {"src": text_node.url, "alt": text_node.text})
-
-
-def split_nodes_delimiter(old_nodes, delimiter, text_type):
-    new_nodes = []
-    for oldnode in old_nodes:
-        if not isinstance(oldnode, TextNode):
-            new_nodes.append(oldnode)
-        else:
-            delimiter_count = 0
-            for char in oldnode.text:
-                if char == delimiter:
-                    delimiter_count += 1
-            if delimiter_count % 2 != 0:
-                raise SyntaxError(f"Invalid markdown: missing {delimiter}")
-            split = oldnode.text.split(delimiter)
-            for sub in split:
-                index = split.index(sub)
-                if sub == "":
-                    continue
-                if index % 2 != 0:
-                    new_nodes.append(TextNode(sub, text_type))
-                else:
-                    new_nodes.append(TextNode(sub, text_type_text))
-    return new_nodes
