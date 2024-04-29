@@ -48,7 +48,7 @@ class TestHelpers(unittest.TestCase):
         textnode = TextNode("This is text", "italic")
         text_to_leafnode = text_node_to_html_node(textnode)
         self.assertTrue(("i", "This is Text", None), (f"{text_to_leafnode.tag},{text_to_leafnode.value},{text_to_leafnode.props}"))
-    
+
     def test_code_textnode_to_leafnode(self):
         textnode = TextNode("This is text", "code")
         text_to_leafnode = text_node_to_html_node(textnode)

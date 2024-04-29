@@ -42,3 +42,6 @@ def text_node_to_html_node(text_node):
         return LeafNode("a", text_node.text, {"href": text_node.url})
     elif text_node.text_type == "image":
         return LeafNode("img", "",  {"src": text_node.url, "alt": text_node.text})
+
+def text_to_textnodes(text):
+     pass 
