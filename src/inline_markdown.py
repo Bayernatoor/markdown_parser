@@ -39,40 +39,53 @@ def split_nodes_delimiter(old_nodes, delimiter, text_type):
 def split_nodes_image(old_nodes):
     new_nodes = []
     for node in old_nodes:
-        num_of_images = 0
-        extracted_images = extract_markdown_images(node.text)
-        num_of_images = len(extracted_images)
-        if num_of_images == 0:
+        if node.text_type != text_type_text:
             new_nodes.append(node)
+            continue
+        original_text = node.text
+        extracted_images = extract_markdown_images(original_text)
+        if len(extracted_images) == 0:
+            new_nodes.append(node)
+            continue
         for extracted in extracted_images:
-            split = node.text.split(f"![{extracted[0]}]({extracted[1]})", 1)
-            node.text = split[1]
+            split = original_text.split(f"![{extracted[0]}]({extracted[1]})", 1)
+            if len(split) != 2:
+                raise SyntaxError("Invalid Markdown, image not closed")
             if not split[0].isspace():
                 new_nodes.append(TextNode(split[0], text_type_text))
 
             new_nodes.append(TextNode(extracted[0], text_type_image,
                                       extracted[1]))
-
+            original_text = split[1]
+        if original_text != "":
+            new_nodes.append(TextNode(original_text, text_type_text))
     return new_nodes
 
 
 def split_nodes_link(old_nodes):
     new_nodes = []
     for node in old_nodes:
-        num_of_links = 0
-        extracted_links = extract_markdown_links(node.text)
-        num_of_links = len(extracted_links)
-        if num_of_links == 0:
+        if node.text_type != text_type_text:
             new_nodes.append(node)
+            continue
+        original_text = node.text
+        extracted_links = extract_markdown_links(original_text)
+        if len(extracted_links) == 0:
+            new_nodes.append(node)
+            continue
         for extracted in extracted_links:
-            split = node.text.split(f"[{extracted[0]}]({extracted[1]})", 1)
-            node.text = split[1]
+            split = original_text.split(f"[{extracted[0]}]({extracted[1]})", 1)
+            if len(split) != 2:
+                raise SyntaxError("Invalid Markdown, link not closed")
             if not split[0].isspace():
                 new_nodes.append(TextNode(split[0], text_type_text))
 
             new_nodes.append(TextNode(extracted[0], text_type_link,
                                       extracted[1]))
 
+            original_text = split[1]
+        if original_text != "":
+            new_nodes.append(TextNode(original_text, text_type_text))
     return new_nodes
 
 
@@ -82,3 +95,17 @@ def extract_markdown_images(text):
 
 def extract_markdown_links(text):
     return re.findall(r"\[(.*?)\]\((.*?)\)", text)
+
+
+def text_to_textnodes(text):
+    text_node = TextNode(text, text_type_text)
+    new_node = []
+
+    bold = split_nodes_delimiter([text_node], "**", text_type_bold)
+    italic = split_nodes_delimiter(bold, "*", text_type_italic)
+    code = split_nodes_delimiter(italic, '`', text_type_code)
+    images = split_nodes_image(code)
+    links = split_nodes_link(images)
+    new_node.extend(links)
+
+    return new_node

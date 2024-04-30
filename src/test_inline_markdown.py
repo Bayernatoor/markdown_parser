@@ -6,7 +6,9 @@ from inline_markdown import (
     extract_markdown_images,
     split_nodes_image,
     split_nodes_link,
+    text_to_textnodes
 )
+
 
 from textnode import (
     TextNode,
@@ -199,6 +201,23 @@ class TestInlineMarkdown(unittest.TestCase):
                 TextNode("This is text with an (https://storage.googleapis.com/qvault-webapp-dynamic-assets/course_assets/zjjcJKZ.png)", "text", None),
             ],
             split_nodes_link(node))
+
+    def test_text_to_textnode(self):
+        text = "This is **text** with an *italic* word and a `code block` and an ![image](https://storage.googleapis.com/qvault-webapp-dynamic-assets/course_assets/zjjcJKZ.png) and a [link](https://boot.dev)"
+        result = [
+                TextNode("This is ", "text", None),
+                TextNode("text", "bold", None),
+                TextNode(" with an ", "text", None),
+                TextNode("italic", "italic", None),
+                TextNode(" word and a ", "text", None),
+                TextNode("code block", "code", None),
+                TextNode(" and an ", "text", None),
+                TextNode("image", "image", "https://storage.googleapis.com/qvault-webapp-dynamic-assets/course_assets/zjjcJKZ.png"),
+                TextNode(" and a ", "text"),
+                TextNode("link", "link", "https://boot.dev"),
+            ]
+
+        self.assertListEqual(result, text_to_textnodes(text))
 
 if __name__ == "__main__":
     unittest.main()
