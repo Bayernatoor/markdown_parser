@@ -1,4 +1,5 @@
 import re
+import unittest
 from inline_markdown import text_to_textnodes, split_nodes_image, split_nodes_link
 from textnode import TextNode
 from markdown_blocks import (markdown_to_blocks,
@@ -20,24 +21,42 @@ text_type_image = "image"
 
 
 def main():
-    markdown_block = ["# Heading", "## Heading", "### Heading", "#### Heading",
-                      "##### Heading", "###### Heading", "- Hi here", "* Why",
-                      "```this is a code block```", ">single line quote",
-                      ">double line quote\n>Here's the second line",
-                      "This is a regular para with **bold** text",
-                      "* unordered list\n- another but with a dash",
-                      "1. Ordered list line 1\n2. line number 2\n3. line number3\n4. fourth line",
-                      "1. ordered list line",
-                      "Here's another one"
-                      ]
-    ordered = "1. Ordered list line 1\n4. fourth line"
-    unordered = "* line number3\n- fourth line"
-    paragrapg = "Just a regular para with `code` and *italic*"
-    code = "``` WHY CODE ? ```"
-    quote = "> Hello there"
-    heading = "## Heading Hello"
+    markdown_blocks = [
+            "# Heading", "## Heading", "### Heading", "#### Heading",
+            "##### Heading", "###### Heading", "- Hi here", "* Why",
+            "```this is a code block```", ">single line quote",
+            ">double line quote\n>Here's the second line",
+            "This is a regular para with **bold** text",
+            "* unordered list\n- another but with a dash",
+            "1. Ordered list line 1\n2. line number 2\n3. line number3\n4. fourth line",
+            "1. ordered list line",
+            "Here's another one"
+            ]
+    actual = [
+           'heading',
+           'heading',
+           'heading',
+           'heading',
+           'heading',
+           'heading',
+           'unordered_list',
+           'unordered_list',
+           'code',
+           'quote',
+           'quote',
+           'paragraph',
+           'unordered_list',
+           'ordered_list',
+           'ordered_list',
+           'paragraph'
+           ]
 
-    return block_to_block_type(ordered)
+    block_types = []
+    for block in markdown_blocks:
+        result = block_to_block_type(block)
+        block_types.append(result)
+
+    return block_types == actual
 
 
 

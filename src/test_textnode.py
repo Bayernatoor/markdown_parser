@@ -1,7 +1,7 @@
 import unittest
 
 from textnode import TextNode, text_node_to_html_node
-from htmlnode import LeafNode
+
 
 class TestTextNode(unittest.TestCase):
     def test_eq(self):
@@ -64,6 +64,6 @@ class TestHelpers(unittest.TestCase):
         text_to_leafnode = text_node_to_html_node(textnode)
         self.assertTrue(("img", "", {'src': 'http://www.link_to_img.com', 'alt': 'alt text'}), (f"{text_to_leafnode.tag},{text_to_leafnode.value},{text_to_leafnode.props}"))
 
+
 if __name__ == "__main__":
     unittest.main()
-

@@ -2,6 +2,7 @@ import unittest
 
 from htmlnode import HTMLNode, LeafNode, ParentNode
 
+
 class TestHTMLNode(unittest.TestCase):
     def test_props_to_html(self):
         node = HTMLNode("cat", "Bak", None, {"href": "https://www.google.com", "target": "_blank"})
@@ -83,7 +84,6 @@ class TestParentNode(unittest.TestCase):
             node.to_html(),
             "<h2><b>Bold text</b>Normal text<i>italic text</i>Normal text</h2>",
         )
-
 
 
 if __name__ == "__main__":
